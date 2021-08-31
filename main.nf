@@ -73,7 +73,7 @@ if(!params.reference) {
     exit 1, "--reference argument is required"
 }
 
-process index {
+process strling_index {
     input:
     path(reference)
     path(fai)
@@ -87,7 +87,7 @@ process index {
     """
 }
 
-process extract {
+process strling_extract {
     input:
     tuple val(sample), path(cram), path(crai)
     path(reference)
@@ -106,7 +106,7 @@ process extract {
     """
 }
 
-process joint_merge {
+process strling_merge {
     input:
     path(bin)
     path(reference)
@@ -127,7 +127,7 @@ process joint_merge {
     """
 }
 
-process call {
+process strling_call {
     input:
     tuple val(sample), path(cram), path(crai), path(bin)
     path(reference)
@@ -150,7 +150,7 @@ process call {
     """
 }
 
-process outliers {
+process strling_outliers {
     publishDir "${params.outdir}/outliers", mode: 'symlink'
 
     input:
@@ -179,10 +179,10 @@ workflow {
         .map { file -> tuple(file.simpleName, file, file + ("${file}".endsWith('.cram') ? '.crai' : '.bai')) }
     fai = "${params.reference}.fai"
 
-    index(params.reference, fai)
-    extract(crams, params.reference, fai, index.out.str, params.proportion_repeat, params.min_mapq)
+    strling_index(params.reference, fai)
+    strling_extract(crams, params.reference, fai, strling_index.out.str, params.proportion_repeat, params.min_mapq)
     if (params.joint) {
-        joint_merge(extract.out.bin_only.collect(),
+        strling_merge(strling_extract.out.bin_only.collect(),
               params.reference,
               fai,
               params.window,
@@ -191,7 +191,7 @@ workflow {
               params.min_clip_total,
               params.min_mapq
         )
-        call(extract.out.bin,
+        strling_call(strling_extract.out.bin,
              params.reference,
              fai,
              joint_merge.out.bounds,
@@ -201,7 +201,7 @@ workflow {
              params.min_clip_total
         )
     } else {
-        call(extract.out.bin,
+        strling_call(extract.out.bin,
              params.reference,
              fai,
              [],
@@ -211,7 +211,7 @@ workflow {
              params.min_clip_total
         )
     }
-    outliers(call.out.genotypes.collect(),
+    strling_outliers(call.out.genotypes.collect(),
              params.control,
              params.slop,
              params.min_clips,
