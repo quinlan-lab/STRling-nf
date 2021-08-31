@@ -194,7 +194,7 @@ workflow {
         strling_call(strling_extract.out.bin,
              params.reference,
              fai,
-             joint_merge.out.bounds,
+             strling_merge.out.bounds,
              params.min_mapq,
              params.min_support,
              params.min_clip,
@@ -211,7 +211,7 @@ workflow {
              params.min_clip_total
         )
     }
-    strling_outliers(call.out.genotypes.collect(),
+    strling_outliers(strling_call.out.genotypes.collect(),
              params.control,
              params.slop,
              params.min_clips,
