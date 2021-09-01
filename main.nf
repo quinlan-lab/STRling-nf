@@ -169,9 +169,11 @@ process strling_outliers {
     path("unplaced.tsv")
 
     script:
+    c = control ? "--control $control" : ""
     """
     strling-outliers.py --genotypes $genotypes --unplaced $unplaced \
-        --emit control.tsv --slop $slop --min_clips $min_clips --min_size $min_size
+        --emit control.tsv --slop $slop --min_clips $min_clips \
+        --min_size $min_size $c
     """
 }
 
