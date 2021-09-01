@@ -140,7 +140,8 @@ process strling_call {
 
     output:
     path("${sample}-bounds.txt"), emit: bounds
-    tuple path("${sample}-genotype.txt"), path("${sample}-unplaced.txt"), emit: genotypes
+    path("${sample}-genotype.txt"), emit: genotypes
+    path("${sample}-unplaced.txt"), emit: unplaced
 
     script:
     b = bounds ? "-b $bounds" : ""
@@ -154,7 +155,8 @@ process strling_outliers {
     publishDir "${params.outdir}/outliers", mode: 'symlink'
 
     input:
-    tuple path(genotypes), path(unplaced)
+    path(genotypes)
+    path(unplaced)
     path(control)
     val(slop)
     val(min_clips)
@@ -180,41 +182,53 @@ workflow {
     fai = "${params.reference}.fai"
 
     strling_index(params.reference, fai)
-    strling_extract(crams, params.reference, fai, strling_index.out.str, params.proportion_repeat, params.min_mapq)
+    strling_extract(
+        crams,
+        params.reference,
+        fai,
+        strling_index.out.str,
+        params.proportion_repeat,
+        params.min_mapq
+    )
     if (params.joint) {
-        strling_merge(strling_extract.out.bin_only.collect(),
-              params.reference,
-              fai,
-              params.window,
-              params.min_support,
-              params.min_clip,
-              params.min_clip_total,
-              params.min_mapq
+        strling_merge(
+            strling_extract.out.bin_only.collect(),
+            params.reference,
+            fai,
+            params.window,
+            params.min_support,
+            params.min_clip,
+            params.min_clip_total,
+            params.min_mapq
         )
-        strling_call(strling_extract.out.bin,
-             params.reference,
-             fai,
-             strling_merge.out.bounds,
-             params.min_mapq,
-             params.min_support,
-             params.min_clip,
-             params.min_clip_total
+        strling_call(
+            strling_extract.out.bin,
+            params.reference,
+            fai,
+            strling_merge.out.bounds,
+            params.min_mapq,
+            params.min_support,
+            params.min_clip,
+            params.min_clip_total
         )
     } else {
-        strling_call(extract.out.bin,
-             params.reference,
-             fai,
-             [],
-             params.min_mapq,
-             params.min_support,
-             params.min_clip,
-             params.min_clip_total
+        strling_call(
+            extract.out.bin,
+            params.reference,
+            fai,
+            [],
+            params.min_mapq,
+            params.min_support,
+            params.min_clip,
+            params.min_clip_total
         )
     }
-    strling_outliers(strling_call.out.genotypes.collect(),
-             params.control,
-             params.slop,
-             params.min_clips,
-             params.min_size
+    strling_outliers(
+        strling_call.out.genotypes.collect().toSortedList(),
+        strling_call.out.unplaced.collect().toSortedList(),
+        params.control,
+        params.slop,
+        params.min_clips,
+        params.min_size
     )
 }
