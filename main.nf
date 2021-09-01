@@ -213,7 +213,7 @@ workflow {
         )
     } else {
         strling_call(
-            extract.out.bin,
+            strling_extract.out.bin,
             params.reference,
             fai,
             [],
