@@ -178,7 +178,6 @@ process strling_outliers {
 }
 
 workflow {
-
     crams = Channel.fromPath(params.crams, checkIfExists: true)
         .map { file -> tuple(file.simpleName, file, file + ("${file}".endsWith('.cram') ? '.crai' : '.bai')) }
     fai = "${params.reference}.fai"

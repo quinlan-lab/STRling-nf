@@ -1,6 +1,6 @@
 # Usage
 
-Joint calls across more than one sample:
+To run joint calls across more than one sample on version 1.0 of the workflow:
 
 ```
 nextflow run quinlan-lab/STRling-nf -r 1.0 \
