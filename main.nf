@@ -163,7 +163,7 @@ process strling_outliers {
     val(min_size)
 
     output:
-    path("*STRS.tsv")
+    path("*STRs.tsv")
     path("control.tsv")
     path("depths.tsv")
     path("unplaced.tsv")
