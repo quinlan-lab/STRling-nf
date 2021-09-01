@@ -146,7 +146,7 @@ process strling_call {
     b = "-b $bounds" ? bounds : ""
     """
     strling call -o $sample $b -m $min_support -c $min_clip -t $min_clip_total \
-        -q $min_mapq -o $sample -v -f $reference $cram $bin
+        -q $min_mapq -v -f $reference $cram $bin
     """
 }
 
