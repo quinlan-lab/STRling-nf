@@ -143,7 +143,7 @@ process strling_call {
     tuple path("${sample}-genotype.txt"), path("${sample}-unplaced.txt"), emit: genotypes
 
     script:
-    b = "-b $bounds" ? bounds : ""
+    b = bounds ? "-b $bounds" : ""
     """
     strling call -o $sample $b -m $min_support -c $min_clip -t $min_clip_total \
         -q $min_mapq -v -f $reference $cram $bin
