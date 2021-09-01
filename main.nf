@@ -224,8 +224,8 @@ workflow {
         )
     }
     strling_outliers(
-        strling_call.out.genotypes.collect().toSortedList(),
-        strling_call.out.unplaced.collect().toSortedList(),
+        strling_call.out.genotypes.collect(),
+        strling_call.out.unplaced.collect(),
         params.control,
         params.slop,
         params.min_clips,
