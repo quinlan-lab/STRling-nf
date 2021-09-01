@@ -9,7 +9,7 @@ if (params.help) {
     ==========
 
     Documentation and issues can be found at:
-    https://github.com/brwnj/...
+    https://github.com/quinlan-lab/STRling-nf
 
     Required arguments:
     -------------------
