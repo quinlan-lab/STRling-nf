@@ -10,7 +10,7 @@ expandsions from short-read data.
 To run joint calls across more than one sample on the `main` branch of the workflow:
 
 ```
-nextflow run quinlan-lab/STRling-nf -r main \
+nextflow run quinlan-lab/STRling-nf -r main -profile docker \
     --joint --crams 'preprocessing/*.bam' --reference GRCh38.fasta \
 ```
 
