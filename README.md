@@ -7,12 +7,14 @@ expandsions from short-read data.
 
 # Usage
 
-To run joint calls across more than one sample on version 1.0 of the workflow:
+To run joint calls across more than one sample on the `main` branch of the workflow:
 
 ```
-nextflow run quinlan-lab/STRling-nf -r 1.0 \
+nextflow run quinlan-lab/STRling-nf -r main \
     --joint --crams 'preprocessing/*.bam' --reference GRCh38.fasta \
 ```
+
+Alternately, `-r` can designate tags, e.g. `-r v1.0.1`.
 
 The workflow expects the alignments to be indexed (contain a .bai/.crai)
 in the same directory as the .bam/.cram. It also expects the reference
