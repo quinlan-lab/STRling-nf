@@ -3,7 +3,7 @@ A Nextflow implementation of the STRling data flow:
 https://github.com/quinlan-lab/STRling
 
 STRling: a method to detect novel (and reference) STR
-expandsions from short-read data.
+expansions from short-read data.
 
 # Usage
 
